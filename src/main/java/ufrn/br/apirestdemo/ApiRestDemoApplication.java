@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ApiRestDemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApiRestDemoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ApiRestDemoApplication.class, args);
+    }
 
 }

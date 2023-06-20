@@ -29,7 +29,12 @@ public class PessoaService {
     }
 
     public void delete(Long id){
-        this.repository.deleteById(id);
+        Optional<Pessoa> pessoaBanco = repository.findById(id);
+        if (pessoaBanco.isPresent()){
+            this.repository.deleteById(id);
+        }else{
+            throw  new EntityNotFoundException();
+        }
     }
 
     public List<Pessoa> list(){

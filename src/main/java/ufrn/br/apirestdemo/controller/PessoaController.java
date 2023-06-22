@@ -1,7 +1,7 @@
 package ufrn.br.apirestdemo.controller;
 
 
-import org.hibernate.collection.spi.PersistentSortedMap;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ufrn.br.apirestdemo.domain.Pessoa;
@@ -14,15 +14,19 @@ import java.util.List;
 public class PessoaController {
 
     PessoaService service;
+    ModelMapper mapper;
 
-    public PessoaController(PessoaService service) {
+    public PessoaController(PessoaService service, ModelMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Pessoa create(@RequestBody Pessoa p){
-        return this.service.create(p);
+    public Pessoa.DtoResponse create(@RequestBody Pessoa.DtoRequest p){
+
+        Pessoa pessoa = this.service.create(Pessoa.DtoRequest.convertToEntity(p, mapper));
+        return Pessoa.DtoResponse.convertToDto(pessoa, mapper);
     }
 
     @GetMapping
@@ -41,7 +45,3 @@ public class PessoaController {
     }
 
 }
-
-
-
-

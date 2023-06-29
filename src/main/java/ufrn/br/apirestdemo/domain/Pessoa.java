@@ -8,8 +8,12 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.RepresentationModel;
+import ufrn.br.apirestdemo.controller.PessoaController;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
@@ -36,11 +40,19 @@ public class Pessoa  extends AbstractEntity{
     }
 
     @Data
-    public static class DtoResponse{
+    public static class DtoResponse extends RepresentationModel<DtoResponse> {
         String nome;
+        Integer idade;
 
         public static DtoResponse convertToDto(Pessoa p, ModelMapper mapper){
             return mapper.map(p, DtoResponse.class);
         }
+
+        public void generateLinks(Long id){
+            add(linkTo(PessoaController.class).slash(id).withSelfRel());
+            add(linkTo(PessoaController.class).withRel("pessoas"));
+            add(linkTo(PessoaController.class).slash(id).withRel("delete"));
+        }
+
     }
 }

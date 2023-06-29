@@ -11,8 +11,19 @@ public abstract class GenericService<E extends AbstractEntity, R extends IGeneri
 
     R repository;
 
+
     public GenericService(R repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public E getById(Long id) {
+        Optional<E> pessoaBanco = repository.findById(id);
+        if (pessoaBanco.isPresent()){
+            return (E) pessoaBanco.get();
+        }else{
+            throw  new EntityNotFoundException();
+        }
     }
 
     @Override

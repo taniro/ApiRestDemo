@@ -13,7 +13,7 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
-@RequestMapping("/pessoas")
+@RequestMapping("/pessoas/")
 public class PessoaController {
 
     PessoaService service;
@@ -59,8 +59,11 @@ public class PessoaController {
 
 
     @PutMapping("{id}")
-    public Pessoa update(@RequestBody Pessoa p, @PathVariable Long id){
-        return this.service.update(p, id);
+    public Pessoa.DtoResponse update(@RequestBody Pessoa.DtoRequest dtoRequest, @PathVariable Long id){
+        Pessoa p = Pessoa.DtoRequest.convertToEntity(dtoRequest, mapper);
+        Pessoa.DtoResponse response = Pessoa.DtoResponse.convertToDto(this.service.update(p, id), mapper);
+        response.generateLinks(id);
+        return response;
     }
 
     @DeleteMapping("{id}")

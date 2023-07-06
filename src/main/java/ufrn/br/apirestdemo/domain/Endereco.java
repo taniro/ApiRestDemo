@@ -18,4 +18,9 @@ import java.time.LocalDateTime;
 @Entity
 public class Endereco extends AbstractEntity {
     String rua;
+
+    @Override
+    public void partialUpdate(AbstractEntity e) {
+
+    }
 }

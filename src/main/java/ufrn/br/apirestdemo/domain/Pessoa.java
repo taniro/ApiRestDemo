@@ -11,8 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.RepresentationModel;
 import ufrn.br.apirestdemo.controller.PessoaController;
 
-import java.time.LocalDateTime;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @EqualsAndHashCode(callSuper = true)
@@ -26,6 +24,14 @@ public class Pessoa  extends AbstractEntity{
     String nome;
     Integer idade;
     Boolean admin = false;
+
+    @Override
+    public void partialUpdate(AbstractEntity e) {
+        if (e instanceof Pessoa pessoa){
+            this.nome = pessoa.nome;
+            this.idade = pessoa.idade;
+        }
+    }
 
     @Data
     public static class DtoRequest{

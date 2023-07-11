@@ -1,7 +1,8 @@
 package ufrn.br.apirestdemo.repository;
 
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import ufrn.br.apirestdemo.domain.AbstractEntity;
 
-public interface IGenericRepository<E extends AbstractEntity> extends ListCrudRepository<E, Long> {
+public interface IGenericRepository<E extends AbstractEntity> extends ListCrudRepository<E, Long>, PagingAndSortingRepository<E, Long> {
 }

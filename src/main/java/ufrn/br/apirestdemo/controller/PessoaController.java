@@ -1,8 +1,12 @@
 package ufrn.br.apirestdemo.controller;
 
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ufrn.br.apirestdemo.domain.Pessoa;
 import ufrn.br.apirestdemo.service.PessoaService;
@@ -26,7 +30,7 @@ public class PessoaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Pessoa.DtoResponse create(@RequestBody Pessoa.DtoRequest p){
+    public Pessoa.DtoResponse create(@RequestBody @Valid Pessoa.DtoRequest p){
 
         Pessoa pessoa = this.service.create(Pessoa.DtoRequest.convertToEntity(p, mapper));
 
@@ -36,6 +40,7 @@ public class PessoaController {
         return response;
     }
 
+    /*
     @GetMapping
     public List<Pessoa.DtoResponse> list(){
 
@@ -45,6 +50,25 @@ public class PessoaController {
                     response.generateLinks(elementoAtual.getId());
                     return response;
                 }).toList();
+    }
+
+     */
+
+    @GetMapping
+    public ResponseEntity<Page<Pessoa.DtoResponse>> find(Pageable page) {
+
+        //System.out.println(page.toString());
+
+        Page<Pessoa.DtoResponse> dtoResponses = service
+                .find(page)
+                .map(record -> {
+                    Pessoa.DtoResponse response = Pessoa.DtoResponse.convertToDto(record, mapper);
+                    response.generateLinks(record.getId());
+                    return response;
+                });
+
+
+        return new ResponseEntity<>(dtoResponses, HttpStatus.OK);
     }
 
     @GetMapping("{id}")

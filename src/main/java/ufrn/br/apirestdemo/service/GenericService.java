@@ -2,6 +2,8 @@ package ufrn.br.apirestdemo.service;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ufrn.br.apirestdemo.domain.AbstractEntity;
 import ufrn.br.apirestdemo.repository.IGenericRepository;
 
@@ -55,5 +57,10 @@ public abstract class GenericService<E extends AbstractEntity, R extends IGeneri
     @Override
     public List<E> list() {
         return (List<E>) this.repository.findAll();
+    }
+
+    @Override
+    public Page<E> find(Pageable page) {
+        return (Page<E>) this.repository.findAll(page);
     }
 }
